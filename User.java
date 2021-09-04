@@ -10,17 +10,14 @@ public class User implements Comparable<User> {
 
 
   //constructor
-
   public User (String[] userData) {
       this.email = userData[0];
       this.password = userData[1];
       this.name = userData[2];
       this.role = userData[3];
   }
-
-
-
-
+  
+  //getters and setters
   public String getEmail() {
       return email;
   }
@@ -55,12 +52,14 @@ public class User implements Comparable<User> {
   }
 
 
-
+//compareTo method is responsible for sorting the stored users data
+  // - superuser before normal user
+  // - alphabetically
 
   @Override
   public int compareTo(User that) {
       if(that.getRole().compareTo(this.getRole()) ==0) {
-          return this.getEmail().compareTo(that.getEmail());
+          return this.getEmail().compareToIgnoreCase(that.getEmail());
       }
       else {
           return that.getRole().compareTo(this.getRole());

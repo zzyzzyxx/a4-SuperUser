@@ -20,21 +20,22 @@ public class UserApplication {
 
         int invalidLogins = 0;
         int indexOfUsers = 0;
-
+        //5 login trials before program termination
         while (invalidLogins < 5 && !validLogins) {
             System.out.println("Enter your email:");
             String email = scan.nextLine();
             System.out.println("Enter your password:");
             String password = scan.nextLine();
-
+            
+            // validating username and password
             for(indexOfUsers = 0; indexOfUsers < UserService.users.length; indexOfUsers++) {
                 if((email.equalsIgnoreCase(UserService.users[indexOfUsers].getEmail())) &&  (password.equals(UserService.users[indexOfUsers].getPassword()))){
 
-                    System.out.println("Welcome " + UserService.users[indexOfUsers].getName() +", " +UserService.users[indexOfUsers].getRole());
+                    System.out.println("Welcome " + UserService.users[indexOfUsers].getName());
                     username = UserService.users[indexOfUsers].getName();
 
                     validLogins = true;
-
+                    //validation of role - super user or normal user
                     if (UserService.users[indexOfUsers].getRole().equals("super_user")){
                         superuser = true;
                         superUserMenu(indexOfUsers);}
@@ -51,13 +52,16 @@ public class UserApplication {
                 System.out.println("Too many failed login attempts, you are now locked out.");
             }
         }
-
         System.out.println("Program terminates");
         scan.close();
     }
 
 
 
+   
+    
+    
+    
     private static void superUserMenu(int indexOfUsers) throws IOException {
         String option = null;
         System.out.println("----------");
@@ -85,8 +89,7 @@ public class UserApplication {
                             validLogins = true;
                             normalUserMenu(indexOfUsers);
                         }
-                    }
-                   
+                    } break; 
                 }
                 break;
             }
@@ -94,28 +97,33 @@ public class UserApplication {
                 System.out.println("Updating username");
                 UserService.changeUserEmail(scan);
                 System.out.println("Your username has been changed");
-                break;
+                superUserMenu(indexOfUsers);
+                //break;
             }
             else if(option.equals("2")) {
                 System.out.println("Updating password");
                 UserService.changeUserPassword(scan);
                 System.out.println("Your password has been changed");
-                break;
+                superUserMenu(indexOfUsers);
             }
             else if(option.equals("3")) {
                 System.out.println("Updating name");
                 UserService.changeUserName(scan);
                 System.out.println("	, "+ UserService.users[indexOfUsers].getName());
-                break;
+                superUserMenu(indexOfUsers);
             }
             else if(!option.equals("4")) {
                 System.out.println("Wrong input. Try again:");
                 superUserMenu(indexOfUsers);
             }
+            break;
         }
     }
 
 
+ 
+    
+    
     private static void normalUserMenu(int indexOfUsers) throws IOException {
         String option = null;
         while(validLogins == true) {
@@ -133,27 +141,27 @@ public class UserApplication {
                     System.out.println("Updating username");
                     UserService.changeUserEmail(scan);
                     System.out.println("Your username has been changed");
-                    break;
+                    normalUserMenu(indexOfUsers);
                 }
                 else if(option.equals("2")) {
                     System.out.println("Updating password");
                     UserService.changeUserPassword(scan);
                     System.out.println("Your password has been changed");
-                    break;
+                    normalUserMenu(indexOfUsers);
                 }
                 else if(option.equals("3")) {
                     System.out.println("Updating name");
                     UserService.changeUserName(scan);
-                    System.out.println("Your name has been changed, "+ username);
-                    break;
+                    System.out.println("Your name has been changed, "+ UserService.users[indexOfUsers].getName()); 
+                    normalUserMenu(indexOfUsers);
                 }
                 else if(!option.equals("4")) {
-                    System.out.println("Wrong input.");
-                    break;
+                    System.out.println("Wrong input. try again:");
+                    normalUserMenu(indexOfUsers);   
                 }
+            	break;
             }
-            System.out.println("Program terminates");
-            break;
+          break;
     }
     }
 }
